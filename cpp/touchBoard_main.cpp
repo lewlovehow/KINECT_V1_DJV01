@@ -14,6 +14,9 @@
 // Frame process lib header
 #include <button.h>
 
+// NiTE.h Header
+#include <NiTE.h>
+
 // OpenNI Header
 #include <OpenNI.h>
 
@@ -38,8 +41,8 @@ typedef duration<long long, pico> picosecond;
 typedef duration<long long, micro> microsecond;
 
 // set const varible
-const unsigned int XRES = 512;
-const unsigned int YRES = 424;
+const unsigned int XRES = 640;
+const unsigned int YRES = 480;
 const unsigned int BIN_THRESH_OFFSET = 5;
 const unsigned int ROI_OFFSET = 70;
 const unsigned int MEDIAN_BLUR_K = 5;
@@ -126,10 +129,11 @@ int main(int argc, char** argv)
     const Scalar debugColor1(84, 140, 29);
     const Scalar debugColor2(255, 255, 255);
 
-    int xMin = 90;
-    int xMax = 350;
-    int yMin = 200;
-    int yMax = 350;
+    int xMin = 114;
+    int xMax = 471;
+    int yMin = 175;
+    int yMax = 440;
+
     Mat1s depthShow_16bit(YRES, XRES);        // 16 bit depth (in millimeters)
     Mat1b depthShow_8bit(YRES, XRES);         // 8 bit depth
     Mat   colorShow(YRES, XRES, CV_8UC3);
@@ -153,7 +157,6 @@ int main(int argc, char** argv)
     Device mDevice;
     if (mDevice.open(ANY_DEVICE) != STATUS_OK) {
         cerr << "Can't Open Device: " << OpenNI::getExtendedError() << endl;
-        OpenNI::shutdown();
         return -1;
     }
     //Create depth stream
@@ -162,7 +165,7 @@ int main(int argc, char** argv)
         if (mDepthStream.create(mDevice, SENSOR_DEPTH) == STATUS_OK) {
             //set video mode
             VideoMode mMode;
-            mMode.setResolution(512, 424);
+            mMode.setResolution(640, 480);
             mMode.setFps(30);
             mMode.setPixelFormat(PIXEL_FORMAT_DEPTH_1_MM);
             if (mDepthStream.setVideoMode(mMode) != STATUS_OK) {
@@ -184,7 +187,7 @@ int main(int argc, char** argv)
         if (mColorStream.create(mDevice, SENSOR_COLOR) == STATUS_OK) {
             //set video mode
             VideoMode mMode;
-            mMode.setResolution(1920, 1080);
+            mMode.setResolution(640, 480);
             mMode.setFps(30);
             mMode.setPixelFormat(PIXEL_FORMAT_RGB888);
             if (mColorStream.setVideoMode(mMode) != STATUS_OK) {
